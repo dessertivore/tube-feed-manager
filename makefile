@@ -9,16 +9,17 @@ lint:
 test:
 	poetry run pytest .
 
+.PHONY: backend
 backend:
-	poetry run uvicorn main:app --reload 
+	cd backend/ && poetry run uvicorn services:app --reload 
 
 .PHONY: frontend
 frontend: 
 	cd frontend/ && npm run start
 
-
+.PHONY: database
 database:
-	docker build -t my_database .
-	docker run -p 5432:5432 my_database
+	cd database/ && docker build -t database .
+	docker run -p 5432:5432 database
 	
 

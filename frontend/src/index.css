@@ -1,11 +1,31 @@
+header {
+  text-align: center;
+  font-size: large;
+}
+
+form, label, button {
+  font-size: medium;
+  text-align: left;
+  margin-left: 20%;
+}
+
+p {
+  text-align: left;
+  margin-left: 35%
+}
+
+
 body {
   margin: 0;
+  font-size: medium;
+  text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

@@ -119,10 +119,28 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "mypy"
+version = "1.6.1"
+description = "Optional static typing for Python"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+mypy-extensions = ">=1.0.0"
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+typing-extensions = ">=4.1.0"
+
+[package.extras]
+dmypy = ["psutil (>=4.0)"]
+install-types = ["pip"]
+reports = ["lxml"]
+
+[[package]]
 name = "mypy-extensions"
 version = "1.0.0"
 description = "Type system extensions for programs checked with the mypy type checker."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -322,7 +340,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2a78a4343ee958f5640a01f4dddb54af60df6b3cde99b0696f686e29284f9aa5"
+content-hash = "b108996484cc2dc8a63cfbaa1f51e7acff963b60617ce3b52de2bac0576d1a7e"
 
 [metadata.files]
 annotated-types = []
@@ -335,6 +353,7 @@ fastapi = []
 h11 = []
 idna = []
 iniconfig = []
+mypy = []
 mypy-extensions = []
 packaging = []
 pathspec = []
