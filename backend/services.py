@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from resources import search_users_nhs, insert_user
+from resources import search_users_nhs, insert_user, add_review, change_feed
 from schemas import User
 
 app = FastAPI()
@@ -45,3 +45,15 @@ async def new_user(new_user: User) -> dict:
         "lowergoalcentile": inserted_user.lower_wt_goal,
         "uppergoalcentile": inserted_user.upper_wt_goal,
     }
+
+
+@app.post("/review")
+async def add_review(nhs, reviewdate, weightcentile) -> str:
+    review = add_review(nhs, reviewdate, weightcentile)
+    return "review added"
+
+
+@app.post("/feed")
+async def change_feed(nhs, feedname, feedvolume) -> str:
+    feed = change_feed(nhs, feedname, feedvolume)
+    return "feed added or updated"

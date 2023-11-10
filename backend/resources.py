@@ -1,5 +1,6 @@
 import psycopg
 from schemas import User
+import datetime
 
 
 # connect to db with psycopg
@@ -16,7 +17,7 @@ def search_users_nhs(input_nhsno: int) -> User:
     # fetch records matching inputted NHS no
     cursor = con.cursor()
     pulled_data = cursor.execute(
-        "SELECT * FROM patient_data.public.patient_data_table WHERE nhs_no=%s;",
+        "SELECT * FROM patient_data.public.patient_data_table INNER JOIN CONTACT ON nhs_no=%s;",
         (input_nhsno,),
     ).fetchone()
     cursor.close()
@@ -55,8 +56,50 @@ def insert_user(new_user: User) -> User:
             new_user.upper_wt_goal,
         ),
     )
+    cursor.execute(
+        """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
+                   VALUES (%s, %s, %s);""",
+        (
+            new_user.nhs_no,
+            new_user.feed,
+            new_user.volume,
+        ),
+    )
+    new_user.reviewed = []
     cursor.close()
     # commit changes to database with code below
     con.commit()
     # search user in database to check it's there, and return details of saved user
     return search_users_nhs(new_user.nhs_no)
+
+
+def add_review(nhs_no: int, review: datetime.date, centile: int):
+    cursor = con.cursor()
+    cursor.execute(
+        """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
+                   VALUES (%s, %s, %s);""",
+        (nhs_no, review, centile),
+    )
+    cursor.close()
+    # commit changes to database with code below
+    con.commit()
+    # search user in database to check it's there, and return details of saved user
+    user = search_users_nhs(nhs_no)
+    user.reviewed.append(review)
+    user.currentcentile = centile
+
+
+def change_feed(nhs_no: int, feed: str, volume: int):
+    cursor = con.cursor()
+    cursor.execute(
+        """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
+                VALUES (%s, %s, %s);""",
+        (nhs_no, feed, volume),
+    )
+    cursor.close()
+    # commit changes to database with code below
+    con.commit()
+    # search user in database to check it's there, and return details of saved user
+    user = search_users_nhs(nhs_no)
+    user.feed = feed
+    user.volume = volume
