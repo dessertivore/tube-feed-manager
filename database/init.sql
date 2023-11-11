@@ -8,13 +8,13 @@ CREATE TABLE patient_data_table (
 );
 
 CREATE TABLE review_table (
-   NHS_no INTEGER PRIMARY KEY,
+   NHS_no INTEGER REFERENCES patient_data_table(NHS_no),
    review_date DATE,
    weight_centile INTEGER
 );
 
 CREATE TABLE feed_table (
-   NHS_no INTEGER PRIMARY KEY,
+   NHS_no INTEGER REFERENCES patient_data_table(NHS_no),
    feed_name TEXT,
    feed_volume INTEGER
 );

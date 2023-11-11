@@ -4,7 +4,7 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import Find from './Find';
 import Insert from './Insert';
 import Home from './Home';
-
+import Review from './Review';
 
 
 
@@ -15,6 +15,8 @@ const Navigation = () => (
 
       <li><NavLink exact activeClassName="current" to='/Find'>Find</NavLink></li>
       <li><NavLink exact activeClassName="current" to='/Insert'>Insert</NavLink></li>
+      <li><NavLink exact activeClassName="current" to='/Review'>Review</NavLink></li>
+
     </ul>
   </nav>
 );
@@ -23,10 +25,9 @@ const Main = () => {
   return (
     <Routes>
       <Route exact path='/' element= {<Home />} />
-
       <Route exact path='/Find' element= {<Find />} />
       <Route exact path='/Insert' element={<Insert />} />
-
+      <Route exact path='/Review' element= {<Review />} />
     </Routes>
   );
 }

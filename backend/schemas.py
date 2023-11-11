@@ -9,7 +9,7 @@ class User(BaseModel):
     lower_wt_goal: int
     upper_wt_goal: int
     nhs_no: int
-    reviewed: list
+    reviewed: list[datetime.date]
     currentcentile: int
     feed: str
     volume: int

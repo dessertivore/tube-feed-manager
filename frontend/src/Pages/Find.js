@@ -11,7 +11,11 @@ function MyForm() {
     const [dob, setDob] = useState('');
     const [lowergoalcentile, setLowergoalcentile] = useState('');
     const [uppergoalcentile, setUppergoalcentile] = useState('');
-  
+    const [weightcentile, setWeightcentile] = useState('');
+    const [reviewed, setReviewed] = useState('');
+    const [feed_name, setFeedname] = useState('');
+    const [feed_volume, setFeedvolume] = useState('');
+
   
     const fetchData = async () => {
       try {
@@ -23,7 +27,12 @@ function MyForm() {
           setLastname(responseData['lastname']);
           setDob(responseData['dob']);
           setLowergoalcentile(responseData['lowergoalcentile']);
-          setUppergoalcentile(responseData['uppergoalcentile'])
+          setUppergoalcentile(responseData['uppergoalcentile']);
+          setWeightcentile(responseData['weightcentile']);
+          setReviewed(responseData['reviewed']);
+          setFeedname(responseData['feed_name']);
+          setFeedvolume(responseData['feed_volume'])
+
         } else {
           console.error('Failed to fetch data from the server.');
           const responseData = await response.json();
@@ -32,6 +41,10 @@ function MyForm() {
           setDob('');
           setLowergoalcentile('');
           setUppergoalcentile('');
+          setWeightcentile(responseData['']);
+          setReviewed(responseData['']);
+          setFeedname(responseData['']);
+          setFeedvolume(responseData[''])
         }
       } catch (error) {
         console.error('Error:', error);
@@ -73,6 +86,10 @@ function MyForm() {
                 <p>Date of Birth: {dob}</p>
                 <p>Lower Weight Goal Centile: {lowergoalcentile}</p>
                 <p>Upper Weight Goal Centile: {uppergoalcentile}</p>
+                <p>Current weight centile: {weightcentile}</p>
+                <p>Review dates: {reviewed}</p>
+                <p>Feed: {feed_name}</p>
+                <p>Feed volume: {feed_volume}</p>
               </div>
             ) : (
               <p>Loading data...</p>

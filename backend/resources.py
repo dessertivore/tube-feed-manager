@@ -17,25 +17,41 @@ def search_users_nhs(input_nhsno: int) -> User:
     # fetch records matching inputted NHS no
     cursor = con.cursor()
     pulled_data = cursor.execute(
-        "SELECT * FROM patient_data.public.patient_data_table INNER JOIN CONTACT ON nhs_no=%s;",
+        """
+    SELECT
+        p.firstname,
+        p.lastname,
+        p.dob,
+        p.lower_wt_goal,
+        p.upper_wt_goal,
+        f.feed_name,
+        f.feed_volume,
+        r.review_date,
+        r.weight_centile
+    FROM
+        patient_data.public.patient_data_table p
+        LEFT JOIN review_table r ON p.nhs_no = r.nhs_no
+        JOIN feed_table f ON p.nhs_no = f.nhs_no
+    WHERE
+        p.nhs_no = %s;
+        """,
         (input_nhsno,),
     ).fetchone()
+    #  fetch list of review dates
     cursor.close()
     # assign attributes to user, based on columns of database
     if pulled_data:
-        firstname: str = pulled_data[0]
-        lastname: str = pulled_data[1]
-        dob = pulled_data[3]
-        nhs_no: int = input_nhsno
-        lower_wt_goal: int = pulled_data[4]
-        upper_wt_goal: int = pulled_data[5]
         pulleduser = User(
-            firstname=firstname,
-            lastname=lastname,
-            dob=dob,
-            nhs_no=nhs_no,
-            lower_wt_goal=lower_wt_goal,
-            upper_wt_goal=upper_wt_goal,
+            firstname=pulled_data[0],
+            lastname=pulled_data[1],
+            dob=pulled_data[2],
+            nhs_no=input_nhsno,
+            lower_wt_goal=pulled_data[3],
+            upper_wt_goal=pulled_data[4],
+            reviewed=pulled_data[7],
+            currentcentile=pulled_data[8],
+            feed=pulled_data[5],
+            volume=pulled_data[6],
         )
         return pulleduser
     else:
@@ -66,31 +82,23 @@ def insert_user(new_user: User) -> User:
         ),
     )
     new_user.reviewed = []
-    cursor.close()
-    # commit changes to database with code below
+
     con.commit()
     # search user in database to check it's there, and return details of saved user
+    cursor.close()
+    # commit changes to database with code below
     return search_users_nhs(new_user.nhs_no)
 
 
-def add_review(nhs_no: int, review: datetime.date, centile: int):
+def add_review(
+    nhs_no: int, review: datetime.date, centile: int, feed: str, volume: int
+):
     cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
                    VALUES (%s, %s, %s);""",
         (nhs_no, review, centile),
     )
-    cursor.close()
-    # commit changes to database with code below
-    con.commit()
-    # search user in database to check it's there, and return details of saved user
-    user = search_users_nhs(nhs_no)
-    user.reviewed.append(review)
-    user.currentcentile = centile
-
-
-def change_feed(nhs_no: int, feed: str, volume: int):
-    cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
                 VALUES (%s, %s, %s);""",
@@ -101,5 +109,7 @@ def change_feed(nhs_no: int, feed: str, volume: int):
     con.commit()
     # search user in database to check it's there, and return details of saved user
     user = search_users_nhs(nhs_no)
+    user.reviewed.append(review)
+    user.currentcentile = centile
     user.feed = feed
     user.volume = volume
