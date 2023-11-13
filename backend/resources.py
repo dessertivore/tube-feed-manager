@@ -18,6 +18,19 @@ def search_users_nhs(input_nhsno: int) -> User:
     cursor = con.cursor()
     pulled_data = cursor.execute(
         """
+    WITH review_data AS (
+    SELECT 
+        r.nhs_no,
+        array_agg(r.weight_centile) as weights,
+        array_agg(r.review_date) as reviews
+    FROM
+        patient_data.public.review_table r
+    WHERE
+        r.nhs_no = 1111111
+    GROUP BY
+        r.nhs_no
+    )
+
     SELECT
         p.firstname,
         p.lastname,
@@ -26,14 +39,14 @@ def search_users_nhs(input_nhsno: int) -> User:
         p.upper_wt_goal,
         f.feed_name,
         f.feed_volume,
-        r.review_date,
-        r.weight_centile
+		rd.weights,
+		rd.reviews
     FROM
         patient_data.public.patient_data_table p
-        LEFT JOIN review_table r ON p.nhs_no = r.nhs_no
-        JOIN feed_table f ON p.nhs_no = f.nhs_no
+    	LEFT JOIN review_data rd ON p.nhs_no = rd.nhs_no
+        JOIN patient_data.public.feed_table f ON p.nhs_no = f.nhs_no
     WHERE
-        p.nhs_no = %s;
+        p.nhs_no = %s
         """,
         (input_nhsno,),
     ).fetchone()
@@ -48,11 +61,14 @@ def search_users_nhs(input_nhsno: int) -> User:
             nhs_no=input_nhsno,
             lower_wt_goal=pulled_data[3],
             upper_wt_goal=pulled_data[4],
-            reviewed=pulled_data[7],
-            currentcentile=pulled_data[8],
             feed=pulled_data[5],
             volume=pulled_data[6],
+            reviewed=None,
+            currentcentile=None,
         )
+        if len(pulled_data) > 6:
+            pulleduser.reviewed = pulled_data[7]
+            pulleduser.currentcentile = pulled_data[8]
         return pulleduser
     else:
         raise ValueError
