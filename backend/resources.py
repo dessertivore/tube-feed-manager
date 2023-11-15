@@ -26,7 +26,7 @@ def search_users_nhs(input_nhsno: int) -> User:
     FROM
         patient_data.public.review_table r
     WHERE
-        r.nhs_no = 1111111
+        r.nhs_no = %s
     GROUP BY
         r.nhs_no
     )
@@ -48,7 +48,7 @@ def search_users_nhs(input_nhsno: int) -> User:
     WHERE
         p.nhs_no = %s
         """,
-        (input_nhsno,),
+        (input_nhsno, input_nhsno),
     ).fetchone()
     #  fetch list of review dates
     cursor.close()
@@ -63,52 +63,55 @@ def search_users_nhs(input_nhsno: int) -> User:
             upper_wt_goal=pulled_data[4],
             feed=pulled_data[5],
             volume=pulled_data[6],
-            reviewed=None,
+            reviewed=[],
             currentcentile=None,
         )
         if len(pulled_data) > 6:
-            pulleduser.reviewed = pulled_data[7]
-            pulleduser.currentcentile = pulled_data[8]
+            pulleduser.reviewed = pulled_data[8]
+            pulleduser.currentcentile = pulled_data[7]
         return pulleduser
     else:
         raise ValueError
 
 
-def insert_user(new_user: User) -> User:
-    cursor = con.cursor()
-    cursor.execute(
-        """INSERT INTO patient_data.public.patient_data_table (nhs_no, firstname, lastname, dob, lower_wt_goal, upper_wt_goal) 
-                   VALUES (%s, %s, %s, %s, %s, %s);""",
-        (
-            new_user.nhs_no,
-            new_user.firstname,
-            new_user.lastname,
-            new_user.dob,
-            new_user.lower_wt_goal,
-            new_user.upper_wt_goal,
-        ),
-    )
-    cursor.execute(
-        """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
-                   VALUES (%s, %s, %s);""",
-        (
-            new_user.nhs_no,
-            new_user.feed,
-            new_user.volume,
-        ),
-    )
-    new_user.reviewed = []
+def insert_user(new_user: User) -> User | str:
+    if search_users_nhs(new_user.nhs_no) == ValueError:
+        cursor = con.cursor()
+        cursor.execute(
+            """INSERT INTO patient_data.public.patient_data_table (nhs_no, firstname, lastname, dob, lower_wt_goal, upper_wt_goal) 
+                    VALUES (%s, %s, %s, %s, %s, %s);""",
+            (
+                new_user.nhs_no,
+                new_user.firstname,
+                new_user.lastname,
+                new_user.dob,
+                new_user.lower_wt_goal,
+                new_user.upper_wt_goal,
+            ),
+        )
+        cursor.execute(
+            """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
+                    VALUES (%s, %s, %s);""",
+            (
+                new_user.nhs_no,
+                new_user.feed,
+                new_user.volume,
+            ),
+        )
+        new_user.reviewed = []
 
-    con.commit()
-    # search user in database to check it's there, and return details of saved user
-    cursor.close()
-    # commit changes to database with code below
-    return search_users_nhs(new_user.nhs_no)
+        con.commit()
+        # search user in database to check it's there, and return details of saved user
+        cursor.close()
+        # commit changes to database with code below
+        return search_users_nhs(new_user.nhs_no)
+    else:
+        return "User already exists"
 
 
 def add_review(
     nhs_no: int, review: datetime.date, centile: int, feed: str, volume: int
-):
+) -> str:
     cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
@@ -125,7 +128,11 @@ def add_review(
     con.commit()
     # search user in database to check it's there, and return details of saved user
     user = search_users_nhs(nhs_no)
-    user.reviewed.append(review)
+    if user.reviewed == None:
+        user.reviewed = [review]
+    if user.reviewed:
+        user.reviewed.append(review)
     user.currentcentile = centile
     user.feed = feed
     user.volume = volume
+    return "Review added"
