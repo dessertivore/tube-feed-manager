@@ -8,13 +8,18 @@ function InsertForm() {
       dob: '',
       lower_wt_goal: '',
       upper_wt_goal: '',
-      nhs_no: ''
+      nhs_no: '',
+      reviewed: [],
+      currentcentile: '0',
+      feed: '',
+      volume: '',
     });
-  
-  
+    
+      
+
     const handleInsertSubmit = (e) => {
       e.preventDefault(); // Prevent the default form submission ie page refreshing
-      fetch('http://127.0.0.1:8000/insertuser',{
+      fetch('http://127.0.0.1:8000/user',{
       method: 'POST', 
       mode: 'cors', 
       headers: {
@@ -82,6 +87,24 @@ function InsertForm() {
               name = "upper_wt_goal"
               value={data.upper_wt_goal}
               onChange={(e) => setData({ ...data, upper_wt_goal: parseInt(e.target.value)})}          />
+          </label>
+          <br />
+          <label>
+            Feed name:  
+            <input
+              type="str"
+              name = "feed"
+              value={data.feed}
+              onChange={(e) => setData({ ...data, feed: (e.target.value)})}          />
+          </label>
+          <br />
+          <label>
+            Feed volume:  
+            <input
+              type="number"
+              name = "volume"
+              value={data.volume}
+              onChange={(e) => setData({ ...data, volume: parseInt(e.target.value)})}          />
           </label>
           <br />
           <button type="submit">Insert patient</button>

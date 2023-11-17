@@ -45,10 +45,10 @@ async def user(nhs_no: int) -> dict:
     }
 
 
-@app.post("/insertuser")
+@app.post("/user")
 async def new_user(new_user: User) -> dict:
     try:
-        inserted_user = insert_user(new_user)
+        inserted_user: User = insert_user(new_user)
     except:
         raise ValueError("Could not insert")
     return {
@@ -77,11 +77,11 @@ async def add_review_fast(
     return "review added"
 
 
-@app.delete("/deletereview")
+@app.delete("/review")
 async def delete_review_fast(nhs: int, reviewdate: datetime.date) -> None:
     delete_review(nhs, reviewdate)
 
 
-@app.delete("/deletepatient")
+@app.delete("/patient")
 async def delete_patient_fast(nhs: int) -> None:
     delete_patient(nhs)
