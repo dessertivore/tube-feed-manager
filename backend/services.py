@@ -1,7 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from resources import search_users_nhs, insert_user, add_review
+from resources import (
+    search_users_nhs,
+    insert_user,
+    add_review,
+    delete_review,
+    delete_patient,
+)
 from schemas import User
+import datetime
 
 app = FastAPI()
 
@@ -40,7 +47,10 @@ async def user(nhs_no: int) -> dict:
 
 @app.post("/insertuser")
 async def new_user(new_user: User) -> dict:
-    inserted_user = insert_user(new_user)
+    try:
+        inserted_user = insert_user(new_user)
+    except:
+        raise ValueError("Could not insert")
     return {
         "nhs_no": inserted_user.nhs_no,
         "firstname": inserted_user.firstname,
@@ -56,6 +66,22 @@ async def new_user(new_user: User) -> dict:
 
 
 @app.post("/review")
-async def add_review_fast(nhs, reviewdate, weightcentile, feedname, feedvolume) -> str:
+async def add_review_fast(
+    nhs: int,
+    reviewdate: datetime.date,
+    weightcentile: int,
+    feedname: str,
+    feedvolume: int,
+) -> str:
     add_review(nhs, reviewdate, weightcentile, feedname, feedvolume)
     return "review added"
+
+
+@app.delete("/deletereview")
+async def delete_review_fast(nhs: int, reviewdate: datetime.date) -> None:
+    delete_review(nhs, reviewdate)
+
+
+@app.delete("/deletepatient")
+async def delete_patient_fast(nhs: int) -> None:
+    delete_patient(nhs)

@@ -75,7 +75,9 @@ def search_users_nhs(input_nhsno: int) -> User:
 
 
 def insert_user(new_user: User) -> User | str:
-    if search_users_nhs(new_user.nhs_no) == ValueError:
+    try:
+        search_users_nhs(new_user.nhs_no)
+    except:
         cursor = con.cursor()
         cursor.execute(
             """INSERT INTO patient_data.public.patient_data_table (nhs_no, firstname, lastname, dob, lower_wt_goal, upper_wt_goal) 
@@ -119,9 +121,16 @@ def add_review(
         (nhs_no, review, centile),
     )
     cursor.execute(
-        """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
-                VALUES (%s, %s, %s);""",
-        (nhs_no, feed, volume),
+        """
+        INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
+            VALUES (%s, %s, %s)
+            ON CONFLICT (nhs_no) DO UPDATE SET
+            feed_name = %s,
+            feed_volume = %s
+            WHERE
+            patient_data.public.feed_table.nhs_no = %s
+            """,
+        (nhs_no, feed, volume, feed, volume, nhs_no),
     )
     cursor.close()
     # commit changes to database with code below
@@ -136,3 +145,46 @@ def add_review(
     user.feed = feed
     user.volume = volume
     return "Review added"
+
+
+def delete_review(nhs_no: int, review_date: datetime.date) -> str:
+    cursor = con.cursor()
+    cursor.execute(
+        """
+        DELETE FROM patient_data.public.review_table
+        WHERE nhs_no = %s AND review_date = %s; 
+        """,
+        (nhs_no, review_date),
+    )
+    cursor.close()
+    # commit changes to database with code below
+    con.commit()
+    return "Review deleted"
+
+
+def delete_patient(nhs_no: int) -> str:
+    cursor = con.cursor()
+    cursor.execute(
+        """
+        DELETE FROM patient_data.public.review_table
+        WHERE nhs_no = %s; 
+        """,
+        (nhs_no,),
+    )
+    cursor.execute(
+        """
+        DELETE FROM patient_data.public.feed_table
+        WHERE nhs_no = %s; 
+        """,
+        (nhs_no,),
+    )
+    cursor.execute(
+        """
+        DELETE FROM patient_data.public.patient_data_table
+        WHERE nhs_no = %s; 
+        """,
+        (nhs_no,),
+    )
+    cursor.close()
+    con.commit()
+    return "Patient data deleted"

@@ -14,7 +14,7 @@ CREATE TABLE review_table (
 );
 
 CREATE TABLE feed_table (
-   NHS_no INTEGER REFERENCES patient_data_table(NHS_no),
+   NHS_no INTEGER UNIQUE REFERENCES patient_data_table(NHS_no),
    feed_name TEXT,
    feed_volume INTEGER
 );

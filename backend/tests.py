@@ -1,4 +1,4 @@
-from resources import search_users_nhs, insert_user, add_review
+from resources import search_users_nhs, insert_user, add_review, delete_review
 from schemas import User
 import datetime
 
@@ -33,3 +33,4 @@ assert (
     add_review(444, datetime.date(2015, 11, 4), 35, "paediasure plus fibre", 700)
     == "Review added"
 )
+assert delete_review(444, (datetime.date(2015, 11, 4))) == "Review deleted"
