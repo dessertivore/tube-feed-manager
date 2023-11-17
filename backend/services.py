@@ -7,7 +7,7 @@ from resources import (
     delete_review,
     delete_patient,
 )
-from schemas import User
+from schemas import User, UserCreate
 import datetime
 
 app = FastAPI()
@@ -25,7 +25,6 @@ app.add_middleware(
 # set variables to input and output from api - in this case find a user if you input nhs
 @app.get("/user/{nhs_no}")
 async def user(nhs_no: int) -> dict:
-    # nhs_no = data
     # find pt
     try:
         founduser = search_users_nhs(nhs_no)
@@ -46,7 +45,7 @@ async def user(nhs_no: int) -> dict:
 
 
 @app.post("/user")
-async def new_user(new_user: User) -> dict:
+async def new_user(new_user: UserCreate) -> dict:
     try:
         inserted_user: User = insert_user(new_user)
     except:
@@ -58,8 +57,6 @@ async def new_user(new_user: User) -> dict:
         "dob": inserted_user.dob,
         "lowergoalcentile": inserted_user.lower_wt_goal,
         "uppergoalcentile": inserted_user.upper_wt_goal,
-        "reviewed": inserted_user.reviewed,
-        "currentcentile": inserted_user.currentcentile,
         "feed": inserted_user.feed,
         "volume": inserted_user.volume,
     }

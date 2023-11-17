@@ -9,8 +9,6 @@ function InsertForm() {
       lower_wt_goal: '',
       upper_wt_goal: '',
       nhs_no: '',
-      reviewed: [],
-      currentcentile: '0',
       feed: '',
       volume: '',
     });

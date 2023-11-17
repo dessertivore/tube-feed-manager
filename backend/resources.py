@@ -1,5 +1,5 @@
 import psycopg
-from schemas import User
+from schemas import User, UserCreate
 import datetime
 
 
@@ -74,7 +74,7 @@ def search_users_nhs(input_nhsno: int) -> User:
         raise ValueError
 
 
-def insert_user(new_user: User) -> User | str:
+def insert_user(new_user: UserCreate) -> User | str:
     try:
         search_users_nhs(new_user.nhs_no)
     except:
@@ -100,7 +100,6 @@ def insert_user(new_user: User) -> User | str:
                 new_user.volume,
             ),
         )
-        new_user.reviewed = []
 
         con.commit()
         # search user in database to check it's there, and return details of saved user
