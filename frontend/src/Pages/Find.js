@@ -5,7 +5,7 @@ function MyForm() {
     const [data, setData] = useState({
       NHS_no: '',
     });
-  
+
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [dob, setDob] = useState('');
@@ -15,8 +15,17 @@ function MyForm() {
     const [reviewed, setReviewed] = useState('');
     const [feed_name, setFeedname] = useState('');
     const [feed_volume, setFeedvolume] = useState('');
+    
+    const deleteUser = async () => {
+      console.log('Button clicked!');
+      try{
+        await fetch('http://127.0.0.1:8000/user?nhs='+data.NHS_no, { method: 'DELETE' })
+        
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
 
-  
     const fetchData = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/user/' +data.NHS_no) 
@@ -32,6 +41,8 @@ function MyForm() {
           setReviewed(responseData['reviewed']);
           setFeedname(responseData['feed_name']);
           setFeedvolume(responseData['feed_volume'])
+          // make delete button visible
+          document.getElementById("deletebutton").style.visibility = "visible";
 
         } else {
           console.error('Failed to fetch data from the server.');
@@ -45,6 +56,8 @@ function MyForm() {
           setReviewed(responseData['']);
           setFeedname(responseData['']);
           setFeedvolume(responseData[''])
+          document.getElementById("deletebutton").style.visibility = "hidden";
+
         }
       } catch (error) {
         console.error('Error:', error);
@@ -58,7 +71,6 @@ function MyForm() {
       fetchData(); // Call the fetchData function to send data to the API
     };
   
-    
   
     return (
       <div>
@@ -93,9 +105,13 @@ function MyForm() {
               </div>
             ) : (
               <p>Loading data...</p>
+         
             )}
           </div>
         ) : null}
+            <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
+            
+
       </div>
     );
   }

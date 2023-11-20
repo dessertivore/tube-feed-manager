@@ -43,6 +43,11 @@ html {
   margin: 0;
 }
 
+.hidden {
+  visibility: hidden;
+
+}
+
 .app {
   width: 960px;
   margin: 0 auto;
@@ -51,6 +56,7 @@ html {
 
 nav ul {
   list-style: none;
+  justify-content: center;
   display: flex;
   background-color: rgb(113, 143, 221);
   margin-bottom: 20px;

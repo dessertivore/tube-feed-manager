@@ -79,6 +79,6 @@ async def delete_review_fast(nhs: int, reviewdate: datetime.date) -> None:
     delete_review(nhs, reviewdate)
 
 
-@app.delete("/patient")
+@app.delete("/user")
 async def delete_patient_fast(nhs: int) -> None:
     delete_patient(nhs)
