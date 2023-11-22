@@ -65,10 +65,13 @@ def search_users_nhs(input_nhsno: int) -> User:
             volume=pulled_data[6],
             reviewed=[],
             currentcentile=None,
+            allcentiles=[],
         )
         if len(pulled_data) > 6:
             pulleduser.reviewed = pulled_data[8]
-            pulleduser.currentcentile = pulled_data[7]
+            pulleduser.allcentiles = pulled_data[7]
+            pulleduser.currentcentile = pulleduser.allcentiles[0]
+
         return pulleduser
     else:
         raise ValueError
@@ -138,8 +141,10 @@ def add_review(
     user = search_users_nhs(nhs_no)
     if user.reviewed == None:
         user.reviewed = [review]
+        user.allcentiles = [centile]
     if user.reviewed:
         user.reviewed.append(review)
+        user.allcentiles.append(centile)
     user.currentcentile = centile
     user.feed = feed
     user.volume = volume

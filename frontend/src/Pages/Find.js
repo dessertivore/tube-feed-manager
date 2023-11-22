@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './../index.css'
+import LineChart from '../acquisitions';
 
 function MyForm() {
     const [data, setData] = useState({
@@ -12,10 +13,13 @@ function MyForm() {
     const [lowergoalcentile, setLowergoalcentile] = useState('');
     const [uppergoalcentile, setUppergoalcentile] = useState('');
     const [weightcentile, setWeightcentile] = useState('');
+    const [allcentiles, setAllcentiles] = useState('');
     const [reviewed, setReviewed] = useState('');
     const [feed_name, setFeedname] = useState('');
     const [feed_volume, setFeedvolume] = useState('');
-    
+    const [reviewedgraph, setReviewedGraph] = useState('');
+    const [allcentilesgraph, setAllcentilesGraph] = useState('');
+
     const deleteUser = async () => {
       console.log('Button clicked!');
       try{
@@ -38,7 +42,10 @@ function MyForm() {
           setLowergoalcentile(responseData['lowergoalcentile']);
           setUppergoalcentile(responseData['uppergoalcentile']);
           setWeightcentile(responseData['weightcentile']);
-          setReviewed(responseData['reviewed']);
+          setAllcentiles(responseData['allcentiles'].join(", "));
+          setAllcentilesGraph(responseData['allcentiles'])
+          setReviewed(responseData['reviewed'].join(", "));
+          setReviewedGraph(responseData['reviewed'])
           setFeedname(responseData['feed_name']);
           setFeedvolume(responseData['feed_volume'])
           // make delete button visible
@@ -53,6 +60,7 @@ function MyForm() {
           setLowergoalcentile('');
           setUppergoalcentile('');
           setWeightcentile(responseData['']);
+          setAllcentiles(responseData['']);
           setReviewed(responseData['']);
           setFeedname(responseData['']);
           setFeedvolume(responseData[''])
@@ -99,9 +107,11 @@ function MyForm() {
                 <p>Lower Weight Goal Centile: {lowergoalcentile}</p>
                 <p>Upper Weight Goal Centile: {uppergoalcentile}</p>
                 <p>Current weight centile: {weightcentile}</p>
+                <p>Centile history: {allcentiles}</p>
                 <p>Review dates: {reviewed}</p>
                 <p>Feed: {feed_name}</p>
                 <p>Feed volume: {feed_volume}</p>
+                
               </div>
             ) : (
               <p>Loading data...</p>
@@ -110,7 +120,11 @@ function MyForm() {
           </div>
         ) : null}
             <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
-            
+            <p>
+                <title>Chart.js example</title>
+                <div><canvas id="acquisitions"></canvas></div>
+                <LineChart reviewed={reviewedgraph} allcentiles={allcentilesgraph} upper={uppergoalcentile} lower = {lowergoalcentile} />
+                </p>
 
       </div>
     );

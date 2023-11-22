@@ -38,6 +38,7 @@ async def user(nhs_no: int) -> dict:
         "lowergoalcentile": founduser.lower_wt_goal,
         "uppergoalcentile": founduser.upper_wt_goal,
         "weightcentile": founduser.currentcentile,
+        "allcentiles": founduser.allcentiles,
         "reviewed": founduser.reviewed,
         "feed_name": founduser.feed,
         "feed_volume": founduser.volume,

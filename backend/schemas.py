@@ -16,6 +16,7 @@ class UserBase(BaseModel):
 class User(UserBase):
     reviewed: list = Field(default_factory=[])
     currentcentile: int | None = Field(default_factory=None)
+    allcentiles: list = Field(default_factory=[])
 
 
 class UserCreate(UserBase):
