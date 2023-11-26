@@ -2,7 +2,7 @@
 name = "tube-feed-manager"
 version = "0.1.0"
 description = "Software to aid management of tube feeds"
-authors = ["dessertivore <landau.sophie@gmail.com>"]
+authors = ["dessertivore"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
