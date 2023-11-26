@@ -3,14 +3,6 @@ import './../index.css'
 
 function UpdateForm() {
     const [data, setData] = useState({
-      firstname: '',
-      lastname: '',
-      dob: '',
-      lower_wt_goal: '',
-      upper_wt_goal: '',
-      nhs_no: '',
-      feed: '',
-      volume: '',
     });
 
     const [nhs_no, setNHS] = useState({});
@@ -18,7 +10,6 @@ function UpdateForm() {
       
 
     const handleUpdateSubmit = (e) => {
-      e.preventDefault(); // Prevent the default form submission ie page refreshing
       fetch('http://127.0.0.1:8000/user/'+nhs_no,{
       method: 'PUT', 
       mode: 'cors', 
@@ -26,7 +17,10 @@ function UpdateForm() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data)
-  })}
+    }) 
+    console.log(data)
+    setData({}) 
+    }
         
     return (
       <div>
@@ -37,9 +31,9 @@ function UpdateForm() {
             <input
               type="number"
               name = "nhs_no"
-              value={nhs_no.nhs_no}
-              onChange={(e) => setNHS({ ...data, nhs_no: parseInt(e.target.value)})}
-            />
+              value={nhs_no == null ? '' : nhs_no}
+              onChange= {(e) => {const newValue = parseInt(e.target.value, 10); // Parse the input value to an integer
+              setNHS(isNaN(newValue) ? null : newValue)}  }                                 />
           </label>
           <br />
           <label>
@@ -93,18 +87,18 @@ function UpdateForm() {
             Feed name:  
             <input
               type="str"
-              name = "feed"
-              value={data.feed}
-              onChange={(e) => setData({ ...data, feed: (e.target.value)})}          />
+              name = "feed_name"
+              value={data.feed_name}
+              onChange={(e) => setData({ ...data, feed_name: (e.target.value)})}          />
           </label>
           <br />
           <label>
             Feed volume:  
             <input
               type="number"
-              name = "volume"
-              value={data.volume}
-              onChange={(e) => setData({ ...data, volume: parseInt(e.target.value)})}          />
+              name = "feed_volume"
+              value={data.feed_volume}
+              onChange={(e) => setData({ ...data, feed_volume: parseInt(e.target.value)})}          />
           </label>
           <br />
           <button type="submit">Update patient</button>

@@ -65,10 +65,10 @@ async def new_user(new_user: UserCreate) -> dict:
     }
 
 
-@app.put("/user/{nhs_no}", responsemodel=User)
-async def update_user_fast(nhs_no: int, field, value) -> User:
-    # storeditem
-    # update_data = item.dict(exclude_unset=True)
+@app.put("/user/{nhs_no}")
+async def update_user_fast(nhs_no: int, input: dict) -> User:
+    field = list(input.keys())[0]
+    value = input[field]
     update_user(nhs_no, field, value)
     return search_users_nhs(nhs_no)
 

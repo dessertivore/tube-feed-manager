@@ -38,9 +38,10 @@ const Main = () => {
 
 const App = () => (
   <div className='app'>
-    <h1>Tube feed manager - created by Dessertivore</h1>
+    <h1>Tube feed manager</h1>
     <Navigation />
     <Main />
+    <footer>Created by dessertivore</footer>
   </div>
 );
 

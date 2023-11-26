@@ -3,6 +3,10 @@ header {
   font-size: large;
 }
 
+footer {
+  font-style: italic;
+}
+
 form, label, button {
   font-size: medium;
   text-align: left;
@@ -59,20 +63,30 @@ nav ul {
   justify-content: center;
   display: flex;
   background-color: rgb(113, 143, 221);
-  margin-bottom: 20px;
 }
 
 nav ul li {
-  padding: 20px;
+  padding: 10px;
 }
 
 nav ul li a {
   color: rgb(0, 0, 0);
   text-decoration: none;
+  display: block;
+  padding: 10px
 }
 
 .current {
   border-bottom: 4px solid white;
+}
+
+.active {
+  background-color: #80c5ed;
+  font-weight:700;
+}
+
+li a:hover {
+  background-color: #62fce0;
 }
 
 h1 {
