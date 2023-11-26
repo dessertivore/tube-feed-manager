@@ -11,15 +11,15 @@ test:
 
 .PHONY: backend
 backend:
-	cd backend/ && poetry run uvicorn services:app --reload 
+	poetry run uvicorn services:app --reload 
 
 .PHONY: frontend
 frontend: 
-	cd frontend/ && npm run start
+	npm run start
 
 .PHONY: database
 database:
-	cd database/ && docker build -t database .
+	docker build -t database .
 	docker run -p 5432:5432 database
 	
 
