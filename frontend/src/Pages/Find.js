@@ -50,6 +50,7 @@ function MyForm() {
           setFeedvolume(responseData['feed_volume'])
           // make delete button visible
           document.getElementById("deletebutton").style.visibility = "visible";
+          document.getElementById("chart").style.visibility = "visible";
 
         } else {
           console.error('Failed to fetch data from the server.');
@@ -120,12 +121,13 @@ function MyForm() {
           </div>
         ) : null}
             <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
-            <p>
-                <title>Chart.js example</title>
+              <div id = "chart" class ="hidden">
+              <br></br>
+              <br></br>
+                <h2>Centile chart</h2>
                 <div><canvas id="acquisitions"></canvas></div>
                 <LineChart reviewed={reviewedgraph} allcentiles={allcentilesgraph} upper={uppergoalcentile} lower = {lowergoalcentile} />
-                </p>
-
+              </div>
       </div>
     );
   }

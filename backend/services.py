@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from resources import (
     search_users_nhs,
@@ -6,8 +7,9 @@ from resources import (
     add_review,
     delete_review,
     delete_patient,
+    update_user,
 )
-from schemas import User, UserCreate
+from schemas import User, UserCreate, UserUpdate
 import datetime
 
 app = FastAPI()
@@ -61,6 +63,14 @@ async def new_user(new_user: UserCreate) -> dict:
         "feed": inserted_user.feed,
         "volume": inserted_user.volume,
     }
+
+
+@app.put("/user/{nhs_no}", responsemodel=User)
+async def update_user_fast(nhs_no: int, field, value) -> User:
+    # storeditem
+    # update_data = item.dict(exclude_unset=True)
+    update_user(nhs_no, field, value)
+    return search_users_nhs(nhs_no)
 
 
 @app.post("/review")

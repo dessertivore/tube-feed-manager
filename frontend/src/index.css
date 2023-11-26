@@ -82,3 +82,12 @@ h1 {
 p {
   margin-bottom: 15px;
 }
+
+#chart {
+  align-items: left;
+}
+
+#deletebutton {
+  align-items: left;
+  margin-left: auto;
+}

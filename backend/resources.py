@@ -1,5 +1,7 @@
 import psycopg
-from schemas import User, UserCreate
+from psycopg import sql
+
+from schemas import User, UserCreate, UserUpdate
 import datetime
 
 
@@ -64,10 +66,10 @@ def search_users_nhs(input_nhsno: int) -> User:
             feed=pulled_data[5],
             volume=pulled_data[6],
             reviewed=[],
-            currentcentile=None,
+            currentcentile=0,
             allcentiles=[],
         )
-        if len(pulled_data) > 6:
+        if pulled_data[7] is not None:
             pulleduser.reviewed = pulled_data[8]
             pulleduser.allcentiles = pulled_data[7]
             pulleduser.currentcentile = pulleduser.allcentiles[0]
@@ -192,3 +194,39 @@ def delete_patient(nhs_no: int) -> str:
     cursor.close()
     con.commit()
     return "Patient data deleted"
+
+
+def update_user(nhs_no: int, field, value) -> User:
+    try:
+        search_users_nhs(nhs_no)
+    except:
+        ValueError("User not found")
+    if field == "feed_name" or field == "feed_volume":
+        query = sql.SQL(
+            "UPDATE public.feed_table SET {field} = %s WHERE nhs_no = %s"
+        ).format(field=sql.Identifier(field))
+        cursor = con.cursor()
+        cursor.execute(
+            query,
+            (
+                value,
+                nhs_no,
+            ),
+        )
+        cursor.close()
+        con.commit()
+    else:
+        query = sql.SQL(
+            "UPDATE public.patient_data_table SET {field} = %s WHERE nhs_no = %s"
+        ).format(field=sql.Identifier(field))
+        cursor = con.cursor()
+        cursor.execute(
+            query,
+            (
+                value,
+                nhs_no,
+            ),
+        )
+        cursor.close()
+        con.commit()
+    return search_users_nhs(nhs_no)
