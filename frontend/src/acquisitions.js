@@ -45,7 +45,7 @@ const LineChart = ({ reviewed, allcentiles, upper, lower }) => {
     }, [reviewed, allcentiles, upper, lower]);
   
     return (
-      <canvas id="myChart" width="400" height="200"></canvas>
+      <canvas id="myChart" width="100" height="200"></canvas>
     );
   };
   

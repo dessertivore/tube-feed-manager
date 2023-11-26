@@ -1,8 +1,9 @@
 import psycopg
 from psycopg import sql
 
-from schemas import User, UserCreate, UserUpdate
+from schemas import User, UserCreate, UserUpdate, AddReview
 import datetime
+from datetime import date, timedelta
 
 
 # connect to db with psycopg
@@ -15,7 +16,7 @@ con = psycopg.connect(
 )
 
 
-def search_users_nhs(input_nhsno: int) -> User:
+def search_users_nhs(input_nhsno: int) -> [User, int, str]:
     # fetch records matching inputted NHS no
     cursor = con.cursor()
     pulled_data = cursor.execute(
@@ -69,17 +70,33 @@ def search_users_nhs(input_nhsno: int) -> User:
             currentcentile=0,
             allcentiles=[],
         )
+        age = int((date.today() - (pulleduser.dob)) / timedelta(days=365.2425))
+        reviewed_since_change = "No"
         if pulled_data[7] is not None:
             pulleduser.reviewed = pulled_data[8]
             pulleduser.allcentiles = pulled_data[7]
             pulleduser.currentcentile = pulleduser.allcentiles[0]
+            # check if reviewed since nutr requirements changed at 1y, 4y, 7y, 11y and 15y
+            review_checkpoints = [1, 4, 7, 11, 15]
 
-        return pulleduser
+            for x in review_checkpoints:
+                if age >= x:
+                    closest_checkpoint = x
+                    continue
+                elif age < x:
+                    break
+            # find date at which child's req changed most recently
+            req_change = pulleduser.dob + datetime.timedelta(
+                days=closest_checkpoint * 365
+            )
+            if (pulleduser.reviewed[0] - req_change).days > 0:
+                reviewed_since_change = "Yes"
+        return pulleduser, age, reviewed_since_change
     else:
         raise ValueError
 
 
-def insert_user(new_user: UserCreate) -> User | str:
+def insert_user(new_user: UserCreate) -> UserCreate:
     try:
         search_users_nhs(new_user.nhs_no)
     except:
@@ -112,17 +129,15 @@ def insert_user(new_user: UserCreate) -> User | str:
         # commit changes to database with code below
         return search_users_nhs(new_user.nhs_no)
     else:
-        return "User already exists"
+        raise ValueError("User already exists")
 
 
-def add_review(
-    nhs_no: int, review: datetime.date, centile: int, feed: str, volume: int
-) -> str:
+def add_review(input: AddReview) -> None:
     cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
                    VALUES (%s, %s, %s);""",
-        (nhs_no, review, centile),
+        (input.nhs_no, input.review_date, input.weight_centile),
     )
     cursor.execute(
         """
@@ -134,23 +149,29 @@ def add_review(
             WHERE
             patient_data.public.feed_table.nhs_no = %s
             """,
-        (nhs_no, feed, volume, feed, volume, nhs_no),
+        (
+            input.nhs_no,
+            input.feed_name,
+            input.feed_volume,
+            input.feed_name,
+            input.feed_volume,
+            input.nhs_no,
+        ),
     )
     cursor.close()
     # commit changes to database with code below
     con.commit()
     # search user in database to check it's there, and return details of saved user
-    user = search_users_nhs(nhs_no)
+    user: User = search_users_nhs(input.nhs_no)[0]
     if user.reviewed == None:
-        user.reviewed = [review]
-        user.allcentiles = [centile]
+        user.reviewed = [input.review_date]
+        user.allcentiles = [input.weight_centile]
     if user.reviewed:
-        user.reviewed.append(review)
-        user.allcentiles.append(centile)
-    user.currentcentile = centile
-    user.feed = feed
-    user.volume = volume
-    return "Review added"
+        user.reviewed.append(input.review_date)
+        user.allcentiles.append(input.weight_centile)
+    user.currentcentile = input.weight_centile
+    user.feed = input.feed_name
+    user.volume = input.feed_volume
 
 
 def delete_review(nhs_no: int, review_date: datetime.date) -> str:

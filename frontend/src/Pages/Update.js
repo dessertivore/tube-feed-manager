@@ -111,7 +111,7 @@ function UpdateForm() {
   const Update= () => {
     return(
       <div className="App">
-          Please input patient details to update the database.
+          <h3>Please input patient details to update the database.</h3>
           <UpdateForm />
         <br />
         

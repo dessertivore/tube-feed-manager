@@ -16,15 +16,31 @@ function InsertForm() {
       
 
     const handleInsertSubmit = (e) => {
-      e.preventDefault(); // Prevent the default form submission ie page refreshing
-      fetch('http://127.0.0.1:8000/user',{
-      method: 'POST', 
-      mode: 'cors', 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-  })}
+      e.preventDefault();
+    
+      fetch('http://127.0.0.1:8000/user', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); // Assuming the response is in JSON format
+      })
+      .then(dataFromServer => {
+        // Handle the data received from the server
+        console.log('Response from server:', dataFromServer);
+        // You can update your state or perform other actions based on the server response
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+    };
         
     return (
       <div>
@@ -115,7 +131,7 @@ function InsertForm() {
   const Insert= () => {
     return(
       <div className="App">
-          Please input patient details to insert into database.
+         <h3> Please input patient details to insert into database.</h3>
           <InsertForm />
         <br />
         

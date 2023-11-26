@@ -9,7 +9,7 @@ from resources import (
     delete_patient,
     update_user,
 )
-from schemas import User, UserCreate, UserUpdate
+from schemas import User, UserCreate, UserUpdate, AddReview
 import datetime
 
 app = FastAPI()
@@ -29,10 +29,14 @@ app.add_middleware(
 async def user(nhs_no: int) -> dict:
     # find pt
     try:
-        founduser = search_users_nhs(nhs_no)
+        output = search_users_nhs(nhs_no)
+
     # raise error if no patient found
     except ValueError:
         raise HTTPException(status_code=404, detail="User not found")
+    founduser = output[0]
+    age = output[1]
+    review_since_change = output[2]
     return {
         "firstname": founduser.firstname,
         "lastname": founduser.lastname,
@@ -44,13 +48,15 @@ async def user(nhs_no: int) -> dict:
         "reviewed": founduser.reviewed,
         "feed_name": founduser.feed,
         "feed_volume": founduser.volume,
+        "age": age,
+        "review_since_change": review_since_change,
     }
 
 
 @app.post("/user")
 async def new_user(new_user: UserCreate) -> dict:
     try:
-        inserted_user: User = insert_user(new_user)
+        inserted_user: User = insert_user(new_user)[0]
     except:
         raise ValueError("Could not insert")
     return {
@@ -74,14 +80,11 @@ async def update_user_fast(nhs_no: int, input: dict) -> User:
 
 
 @app.post("/review")
-async def add_review_fast(
-    nhs: int,
-    reviewdate: datetime.date,
-    weightcentile: int,
-    feedname: str,
-    feedvolume: int,
-) -> str:
-    add_review(nhs, reviewdate, weightcentile, feedname, feedvolume)
+async def add_review_fast(input: AddReview):
+    try:
+        add_review(input)
+    except:
+        raise ValueError("Could not insert")
     return "review added"
 
 

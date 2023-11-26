@@ -17,6 +17,8 @@ function MyForm() {
     const [reviewed, setReviewed] = useState('');
     const [feed_name, setFeedname] = useState('');
     const [feed_volume, setFeedvolume] = useState('');
+    const [age, setAge] = useState('');
+    const [reviewedSinceChange, setReviewedSinceChange] = useState('');
     const [reviewedgraph, setReviewedGraph] = useState('');
     const [allcentilesgraph, setAllcentilesGraph] = useState('');
 
@@ -39,12 +41,14 @@ function MyForm() {
           setFirstname(responseData['firstname']);
           setLastname(responseData['lastname']);
           setDob(responseData['dob']);
+          setAge(responseData['age']);
           setLowergoalcentile(responseData['lowergoalcentile']);
           setUppergoalcentile(responseData['uppergoalcentile']);
           setWeightcentile(responseData['weightcentile']);
           setAllcentiles(responseData['allcentiles'].join(", "));
           setAllcentilesGraph(responseData['allcentiles'])
           setReviewed(responseData['reviewed'].join(", "));
+          setReviewedSinceChange(responseData['review_since_change']);
           setReviewedGraph(responseData['reviewed'])
           setFeedname(responseData['feed_name']);
           setFeedvolume(responseData['feed_volume'])
@@ -96,22 +100,26 @@ function MyForm() {
           
           <button type="submit">Find patient</button>
         </form>
-    
+        <br />
+          
       
         {data ? (
-          <div>
+          <div id='FindApp'>
             {firstname !== 0 && lastname!== 0 && dob!== 0 && lowergoalcentile!== 0 && uppergoalcentile!== 0 ? (
-              <div>
-                <p>First Name: {firstname}</p>
-                <p>Last Name: {lastname}</p>
-                <p>Date of Birth: {dob}</p>
-                <p>Lower Weight Goal Centile: {lowergoalcentile}</p>
-                <p>Upper Weight Goal Centile: {uppergoalcentile}</p>
-                <p>Current weight centile: {weightcentile}</p>
-                <p>Centile history: {allcentiles}</p>
-                <p>Review dates: {reviewed}</p>
-                <p>Feed: {feed_name}</p>
-                <p>Feed volume: {feed_volume}</p>
+              <div >
+                <br />First Name: {firstname}
+   
+                <br />Last Name: {lastname}
+                <br />Date of Birth: {dob}
+                <br />Age: {age}
+                <br />Lower Weight Goal Centile: {lowergoalcentile}
+                <br />Upper Weight Goal Centile: {uppergoalcentile}
+                <br />Current weight centile: {weightcentile}
+                <br />Centile history: {allcentiles}
+                <br />Review dates: {reviewed}
+                <br />Reviewed since nutritional requirements changed?: {reviewedSinceChange}
+                <br />Feed: {feed_name}
+                <br />Feed volume: {feed_volume}
                 
               </div>
             ) : (
@@ -120,7 +128,7 @@ function MyForm() {
             )}
           </div>
         ) : null}
-            <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
+         <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
               <div id = "chart" class ="hidden">
               <br></br>
               <br></br>
@@ -135,7 +143,7 @@ function MyForm() {
 const Find= () => {
     return(
       <div className="App">
-            Please input an NHS number to load a patient.
+            <h3>Please input an NHS number to load a patient.</h3>
           
           <MyForm />
           <br />

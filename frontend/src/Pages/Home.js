@@ -1,7 +1,14 @@
 const Home= () => {
     return(
       <div className="App">
-            Welcome to my tube feed management software. It is currently under construction.
+            <h3>Welcome to my tube feed management software.</h3>
+            <br />
+            <p>Current features are: create user, read user, update user, delete user. 
+              <br />
+              Each user has review and tube feed data stored in a database.
+              Weight centile history can be viewed as a graph when viewing a user.
+
+            </p>
           <br />
         <br />
         

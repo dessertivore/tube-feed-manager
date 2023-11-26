@@ -32,3 +32,11 @@ class UserUpdate(BaseModel):
     nhs_no: int | None = None
     feed: str | None = None
     volume: int | None = None
+
+
+class AddReview(BaseModel):
+    nhs_no: int
+    review_date: datetime.date
+    weight_centile: int
+    feed_name: str
+    feed_volume: int
