@@ -1,16 +1,13 @@
-# Tube feed managing software - in development
+# Tube feed managing software 
 
-Currently setting up main database - only functionalities are to search for and insert new users via React frontend.
-
-## Future plans
+## Functions
+CRUD: Create user, read user, update user, delete user
 Add in review dates
 Add in tube feeds and volumes
-Calculate total energy/protein from tube feeds
 View all previous review dates
 Update current weight centile
-Draw graph of weight centile over time
-Alerts when child reaches age at which nutritional requirements change, and therefore requires review of tube feed
-Alerts when child's inputted weight centile is outside of desired range
+View graph of weight centile over time, and how it compares to goal weight centile
+
 
 ## Installation
 
