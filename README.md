@@ -1,12 +1,11 @@
 # Tube feed managing software 
 
 ## Functions
-CRUD: Create user, read user, update user, delete user
-Add in review dates
-Add in tube feeds and volumes
-View all previous review dates
-Update current weight centile
-View graph of weight centile over time, and how it compares to goal weight centile
+- CRUD: Create user, read user, update user, delete user
+- Read/insert/update review dates
+- Read/insert/update in tube feeds and volumes
+- Read/insert/update current weight centile
+- View graph of weight centile over time, and how it compares to goal weight centile
 
 
 ## Installation
