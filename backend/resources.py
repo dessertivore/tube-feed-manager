@@ -5,11 +5,10 @@ from schemas import User, UserCreate, UserUpdate, AddReview
 import datetime
 from datetime import date, timedelta
 
-
+"""
+Connect to database with psycopg.
+"""
 con = psycopg.connect(
-    """
-    Connect to database with psycopg.
-    """
     dbname="patient_data",
     user="myuser",
     password="password",
@@ -21,7 +20,22 @@ con = psycopg.connect(
 def search_users_nhs(input_nhsno: int) -> [User, int, str]:
     """
     Fetch records matching inputted NHS no.
+
+    Args:
+        input_nhsno: NHS number of patient to input.
+
+    Raises:
+        ValueError: if unable to find user, "Could not find user.".
+
+    Returns:
+        pulleduser: information about patient who was searched for.
+        age: current age of patient.
+        reviewed_since_change: Yes if patient has been reviewed since most recent
+            nutritional requirements change, or No if not.
+
+        I plan to update output to return Basemodel schema.
     """
+
     cursor = con.cursor()
     pulled_data = cursor.execute(
         """
@@ -97,11 +111,23 @@ def search_users_nhs(input_nhsno: int) -> [User, int, str]:
                 reviewed_since_change = "Yes"
         return pulleduser, age, reviewed_since_change
     else:
-        raise ValueError
+        raise ValueError("Could not find user.")
+
 
 def insert_user(new_user: UserCreate) -> UserCreate:
     """
     Insert new user into database.
+
+    Args:
+        new_user: Basemodel schema UserCreate with information needed to create new
+        patient.
+
+    Raises:
+        ValueError: If user already exists, and therefore cannot insert another user
+        with that NHS number, raise error "User already exists.".
+
+    Returns:
+        UserCreate: Basemodel schema with information about inserted user.
     """
     try:
         search_users_nhs(new_user.nhs_no)
@@ -135,13 +161,20 @@ def insert_user(new_user: UserCreate) -> UserCreate:
         # commit changes to database with code below
         return search_users_nhs(new_user.nhs_no)
     else:
-        raise ValueError("User already exists")
+        raise ValueError("User already exists.")
+
 
 def insert_review(input: AddReview) -> None:
     """
-    Insert new review into database, with date, new tube feed regimen, and
-    current weight centile.
+    Insert new review into database.
+
+    Args:
+        input: Basemodel schema with information needed to add review.
+
+    Returns:
+        None: if successful in adding review, nothing is returned.
     """
+
     cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
@@ -182,9 +215,17 @@ def insert_review(input: AddReview) -> None:
     user.feed = input.feed_name
     user.volume = input.feed_volume
 
+
 def delete_review(nhs_no: int, review_date: datetime.date) -> str:
     """
-    Delete information stored from a specific review, e.g. if wrong information inserted.
+    Delete a specific review, e.g. if wrong information inserted.
+
+    Args:
+        nhs_no: NHS number of patient whose review is being deleted.
+        review_date: date of review to delete.
+
+    Returns:
+        str: if successful in deleting review, return "Review deleted."
     """
     cursor = con.cursor()
     cursor.execute(
@@ -197,11 +238,18 @@ def delete_review(nhs_no: int, review_date: datetime.date) -> str:
     cursor.close()
     # commit changes to database with code below
     con.commit()
-    return "Review deleted"
+    return "Review deleted."
+
 
 def delete_patient(nhs_no: int) -> str:
     """
     Delete patient from database, e.g. if stops requiring tube feed.
+
+    Args:
+        nhs_no (int): NHS number of patient being deleted.
+
+    Returns:
+        str: "Patient data deleted." returned if successfully deleted.
     """
     cursor = con.cursor()
     cursor.execute(
@@ -227,12 +275,25 @@ def delete_patient(nhs_no: int) -> str:
     )
     cursor.close()
     con.commit()
-    return "Patient data deleted"
+    return "Patient data deleted."
 
 
-def update_user(nhs_no: int, field, value) -> User:
+def update_user(nhs_no: int, field: str, value: str | int) -> [User, int, str]:
     """
-    Update user information, e.g. if tube feed information was inputted wrongly at start.
+    Update user info, e.g. if tube feed information was inputted wrongly at start.
+
+    Args:
+        nhs_no (int): NHS number of patient being updated.
+        field (str): name of field to update (e.g. feed name).
+        value (str or int): value to update this field with (e.g. Paediasure).
+
+    Returns:
+        pulleduser: information about patient who was searched for.
+        age: current age of patient.
+        reviewed_since_change: Yes if patient has been reviewed since most recent
+            nutritional requirements change, or No if not.
+
+        Planning to change output to a Basemodel schema.
     """
     try:
         search_users_nhs(nhs_no)

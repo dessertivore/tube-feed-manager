@@ -92,6 +92,10 @@ function MyForm() {
           <label>
             NHS number:  
             <input
+              label = "NHS Number"
+              inputStyle="box" 
+              labelStyle="stacked"
+              placeholder="NHS Number"
               type="number"
               value={data.NHS_no}
               onChange={handleChange}

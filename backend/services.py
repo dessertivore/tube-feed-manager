@@ -27,7 +27,18 @@ app.add_middleware(
 @app.get("/user/{nhs_no}")
 async def user(nhs_no: int) -> dict:
     """
-    Read user information from database.
+    Reads all user information linked to specified NHS number.
+
+    Args:
+        nhs_no (int): NHS number for patient.
+
+    Raises:
+        HTTPException: If no patient with that NHS number in database, raises this
+        error.
+
+    Returns:
+        dict: Full patient details from database. I plan to change this to a Basemodel
+        schema.
     """
     try:
         output = search_users_nhs(nhs_no)
@@ -57,11 +68,22 @@ async def user(nhs_no: int) -> dict:
 async def create_user_fast(new_user: UserCreate) -> dict:
     """
     Create new user using information from React form.
+
+    Args:
+        UserCreate: Basemodel schema specifying information needed for user creation.
+
+    Raises:
+        ValueError: If unable to insert user, raises this error "Could not create
+        user.".
+
+    Returns:
+        dict: with patient information which end-user just typed in. I plan to change
+        this to a Basemodel schema.
     """
     try:
         inserted_user: User = insert_user(new_user)[0]
     except:
-        raise ValueError("Could not insert")
+        raise ValueError("Could not create user.")
     return {
         "nhs_no": inserted_user.nhs_no,
         "firstname": inserted_user.firstname,
@@ -78,36 +100,82 @@ async def create_user_fast(new_user: UserCreate) -> dict:
 async def update_user_fast(nhs_no: int, input: dict) -> User:
     """
     Update user information.
+
+    Args:
+        nhs_no: NHS number of patient to update.
+        input: dictionary with information to update patient details with.
+
+    Raises:
+        ValueError: if unable to update user, "Could not update user."
+
+    Returns:
+       User: updated user information in format of Basemodel User.
     """
     field = list(input.keys())[0]
     value = input[field]
-    update_user(nhs_no, field, value)
+    try:
+        update_user(nhs_no, field, value)
+    except:
+        raise ValueError("Could not update user.")
     return search_users_nhs(nhs_no)
 
 
 @app.post("/review")
-async def create_review_fast(input: AddReview):
+async def create_review_fast(input: AddReview) -> None:
     """
-    Create review for insertion into database using information in React form.
+    Create review for a patient in database using information in React form.
+
+    Args:
+        AddReview: Basemodel schema specifying information needed for review creation.
+
+    Raises:
+        ValueError: if unable to create review, "Could not create review."
+
+    Returns:
+        None: nothing is returned if successful.
     """
     try:
         insert_review(input)
     except:
-        raise ValueError("Could not insert")
-    return "review added"
+        raise ValueError("Could not create review.")
 
 
 @app.delete("/review")
 async def delete_review_fast(nhs: int, reviewdate: datetime.date) -> None:
     """
     Delete information from a specific review.
+
+    Args:
+        nhs: NHS number of patient.
+        reviewdate: date of review to be deleted.
+
+    Raises:
+        ValueError: if unable to delete review, "Could not delete review."
+
+    Returns:
+        None: nothing is returned if sucessful.
     """
-    delete_review(nhs, reviewdate)
+    try:
+        delete_review(nhs, reviewdate)
+    except:
+        raise ValueError("Could not delete review.")
 
 
 @app.delete("/user")
 async def delete_patient_fast(nhs: int) -> None:
     """
     Delete patient information for specific patient.
+
+    Args:
+        nhs: NHS number of patient.
+
+    Raises:
+        ValueError: if unable to delete patient, "Could not delete patient.".
+
+    Returns:
+        None: if successful, nothing returned.
     """
-    delete_patient(nhs)
+    try:
+        delete_patient(nhs)
+    except:
+        raise ValueError("Could not delete patient.")
