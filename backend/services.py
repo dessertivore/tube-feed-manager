@@ -24,13 +24,13 @@ app.add_middleware(
 )
 
 
-# set variables to input and output from api - in this case find a user if you input nhs
 @app.get("/user/{nhs_no}")
 async def user(nhs_no: int) -> dict:
-    # find pt
+    """
+    Read user information from database.
+    """
     try:
         output = search_users_nhs(nhs_no)
-
     # raise error if no patient found
     except ValueError:
         raise HTTPException(status_code=404, detail="User not found")
@@ -54,7 +54,10 @@ async def user(nhs_no: int) -> dict:
 
 
 @app.post("/user")
-async def new_user(new_user: UserCreate) -> dict:
+async def create_user_fast(new_user: UserCreate) -> dict:
+    """
+    Create new user using information from React form.
+    """
     try:
         inserted_user: User = insert_user(new_user)[0]
     except:
@@ -73,6 +76,9 @@ async def new_user(new_user: UserCreate) -> dict:
 
 @app.put("/user/{nhs_no}")
 async def update_user_fast(nhs_no: int, input: dict) -> User:
+    """
+    Update user information.
+    """
     field = list(input.keys())[0]
     value = input[field]
     update_user(nhs_no, field, value)
@@ -80,7 +86,10 @@ async def update_user_fast(nhs_no: int, input: dict) -> User:
 
 
 @app.post("/review")
-async def add_review_fast(input: AddReview):
+async def create_review_fast(input: AddReview):
+    """
+    Create review for insertion into database using information in React form.
+    """
     try:
         insert_review(input)
     except:
@@ -90,9 +99,15 @@ async def add_review_fast(input: AddReview):
 
 @app.delete("/review")
 async def delete_review_fast(nhs: int, reviewdate: datetime.date) -> None:
+    """
+    Delete information from a specific review.
+    """
     delete_review(nhs, reviewdate)
 
 
 @app.delete("/user")
 async def delete_patient_fast(nhs: int) -> None:
+    """
+    Delete patient information for specific patient.
+    """
     delete_patient(nhs)
