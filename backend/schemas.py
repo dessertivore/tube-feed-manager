@@ -1,6 +1,10 @@
 from pydantic import BaseModel, Field
 import datetime
 
+"""
+Basemodel schemas used to define classes used in this software.
+"""
+
 
 class UserBase(BaseModel):
     firstname: str

@@ -1,12 +1,18 @@
 # Tube feed managing software 
 
+## Description
+Software to store information about tube fed patients, for use by a paediatric dietitian.
+
+This app keeps track of whether children were reviewed by the dietitian or not since 
+their nutritional requirements changed (at 1, 4, 7, 11 and 15 years of age), what feed
+they are on, and how their weight centile is in comparison with their goal weight centile.
+
 ## Functions
 - CRUD: Create user, read user, update user, delete user
 - Read/insert/update review dates
-- Read/insert/update in tube feeds and volumes
+- Read/insert/update tube feeds and volumes
 - Read/insert/update current weight centile
-- View graph of weight centile over time, and how it compares to goal weight centile
-
+- View graph of weight centile over time, and how it compares to goal weight centile range
 
 ## Installation
 
@@ -23,22 +29,22 @@ Must have docker installed with postgres image.
 
 In separate terminals:
 
-- While in `database` directory:
+- Start up the database, with PostgreSQL and Docker:
 
 ```shell
 make database
 ```
 
-- While in `backend` directory: 
+- Start up the API:
 
 ```shell
 make backend
 ```
 
-- Then while in `frontend` directory:
+- Start up the React frontend:
 
 ```shell
 make frontend
 ```
 
-Can then be used via React frontend.
+App can then be used via React frontend.
