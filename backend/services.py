@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from resources import (
     search_users_nhs,
     insert_user,
-    add_review,
+    insert_review,
     delete_review,
     delete_patient,
     update_user,
@@ -82,7 +82,7 @@ async def update_user_fast(nhs_no: int, input: dict) -> User:
 @app.post("/review")
 async def add_review_fast(input: AddReview):
     try:
-        add_review(input)
+        insert_review(input)
     except:
         raise ValueError("Could not insert")
     return "review added"

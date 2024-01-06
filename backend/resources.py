@@ -6,8 +6,10 @@ import datetime
 from datetime import date, timedelta
 
 
-# connect to db with psycopg
 con = psycopg.connect(
+    """
+    Connect to database with psycopg.
+    """
     dbname="patient_data",
     user="myuser",
     password="password",
@@ -17,7 +19,9 @@ con = psycopg.connect(
 
 
 def search_users_nhs(input_nhsno: int) -> [User, int, str]:
-    # fetch records matching inputted NHS no
+    """
+    Fetch records matching inputted NHS no.
+    """
     cursor = con.cursor()
     pulled_data = cursor.execute(
         """
@@ -95,8 +99,10 @@ def search_users_nhs(input_nhsno: int) -> [User, int, str]:
     else:
         raise ValueError
 
-
 def insert_user(new_user: UserCreate) -> UserCreate:
+    """
+    Insert new user into database.
+    """
     try:
         search_users_nhs(new_user.nhs_no)
     except:
@@ -131,8 +137,11 @@ def insert_user(new_user: UserCreate) -> UserCreate:
     else:
         raise ValueError("User already exists")
 
-
-def add_review(input: AddReview) -> None:
+def insert_review(input: AddReview) -> None:
+    """
+    Insert new review into database, with date, new tube feed regimen, and
+    current weight centile.
+    """
     cursor = con.cursor()
     cursor.execute(
         """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
@@ -173,8 +182,10 @@ def add_review(input: AddReview) -> None:
     user.feed = input.feed_name
     user.volume = input.feed_volume
 
-
 def delete_review(nhs_no: int, review_date: datetime.date) -> str:
+    """
+    Delete information stored from a specific review, e.g. if wrong information inserted.
+    """
     cursor = con.cursor()
     cursor.execute(
         """
@@ -188,8 +199,10 @@ def delete_review(nhs_no: int, review_date: datetime.date) -> str:
     con.commit()
     return "Review deleted"
 
-
 def delete_patient(nhs_no: int) -> str:
+    """
+    Delete patient from database, e.g. if stops requiring tube feed.
+    """
     cursor = con.cursor()
     cursor.execute(
         """
@@ -218,6 +231,9 @@ def delete_patient(nhs_no: int) -> str:
 
 
 def update_user(nhs_no: int, field, value) -> User:
+    """
+    Update user information, e.g. if tube feed information was inputted wrongly at start.
+    """
     try:
         search_users_nhs(nhs_no)
     except:

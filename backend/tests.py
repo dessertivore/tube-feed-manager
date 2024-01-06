@@ -1,7 +1,7 @@
 from resources import (
     search_users_nhs,
     insert_user,
-    add_review,
+    insert_review,
     delete_review,
     update_user,
 )
@@ -36,7 +36,7 @@ assert insert_user(testUser) == "User already exists"
 testreview = AddReview(
     444, datetime.date(2015, 11, 4), 35, "paediasure plus fibre", 700
 )
-add_review(testreview)
+insert_review(testreview)
 assert delete_review(444, (datetime.date(2015, 11, 4))) == "Review deleted"
 
 assert update_user(111, "firstname", "pudding").firstname == "pudding"
