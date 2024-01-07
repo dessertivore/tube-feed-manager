@@ -9,9 +9,9 @@ they are on, and how their weight centile is in comparison with their goal weigh
 
 ## Functions
 - CRUD: Create user, read user, update user, delete user
-- Read/insert/update review dates
-- Read/insert/update tube feeds and volumes
-- Read/insert/update current weight centile
+- Create/read reviews
+- Create/read/update tube feeds and volumes
+- Create/read/update current weight centile
 - View graph of weight centile over time, and how it compares to goal weight centile range
 
 ## Installation
@@ -48,3 +48,10 @@ make frontend
 ```
 
 App can then be used via React frontend.
+
+
+## Future plans
+- Delete specific reviews - in progress
+- Search by other parameters:
+    - View all patients on a specific tube feed, in case of supply issues
+    - Search by age (younger patients need reviewing more frequently)

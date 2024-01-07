@@ -52,7 +52,7 @@ const Main = () => {
  */
 
 const App = () => (
-  <div className='app'>
+  <div className="app">
     <h1>Tube feed manager</h1>
     <Navigation />
     <Main />

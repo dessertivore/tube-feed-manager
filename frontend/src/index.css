@@ -1,46 +1,33 @@
 * {
   box-sizing: border-box;
+  justify-items: center;
+}
+
+.app {
+  width:90%;
+  text-align: center;
+  align-items: center;
+  text-justify: center;
+  position: absolute;
 }
 
 h1 {
-  text-align: center;
   text-decoration: underline;
   font-size:x-large;
 }
 
-footer {
-  font-style: italic;
+h2 {
+  margin-left: -40%;
   text-align: center;
 }
-
-label, button, input {
-  font-size: medium;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-}
-
-input:focus {
-  height:100%;
-  font-size: medium;
-
-}
-
-p {
-  text-align: center;
-  text-justify: inter-cluster;
-}
-
 #FindApp {
   text-align: left;
-  margin-left: 15% !important;
+  margin-left: 30% !important;
 }
 
 body {
   font-size: medium;
-  text-align: center;
-  display: flex;
-  justify-content: center; /* Horizontal centering */
+  justify-items: center; /* Horizontal centering */
   align-items: center; /* Vertical centering */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -49,73 +36,55 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-
 html {
   box-sizing: border-box;
 }
 
-
-
 .hidden {
-  display: block;
-
+  display: none;
 }
 
-.app {
-  width:90%;
-  text-align: center;
-  align-items: flex-start;
-  position: relative;
-  padding: 0;
-  margin-left: auto;
-
+nav {
+  display: flex;
+  justify-content: space-around; /* or other appropriate justification */
+  align-items: center;
 }
-
 
 nav ul {
-  height: 60px;
-  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  align-items: center;
-  position: relative;
-  padding: 0.5rem 0.5rem;
   background-color: #fff;
   color: black;
   box-shadow: 0 2px 2px 2px rgba(9, 9, 9, 0.23);
-  margin-left: auto;
+  height: 60px;
+  align-items: center;
+
 }
 
 nav ul li {
-  list-style-type: none;
-  margin: 0 1rem;
-
+  margin: 0 10px; /* adjust as needed */
 }
 
 nav ul li a {
-  color: rgb(0, 0, 0);
   text-decoration: none;
-  display: block;
-  height: 60%;
+  color: black;
   padding: 10px;
-  width: 90%;
+  transition: font-weight 0.3s ease;
 }
 
 li a:hover, .active {
-  font-weight: 700;
+  font-weight: bolder;
 } 
 
 h1 {
   margin-bottom: 20px;
-}
-
-h2 {
-  text-align: center;
 }
 
 p {
@@ -123,12 +92,10 @@ p {
 }
 
 #chart {
-  align-items: center !important;
-  padding-left: 20%;
   width: 70%;
   height:50%;
 }
 
 #deletebutton {
-  margin-left: 50%;
+  margin-left: 30%;
 }

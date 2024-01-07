@@ -72,9 +72,9 @@ function MyForm() {
           setReviewedGraph(responseData['reviewed'])
           setFeedname(responseData['feed_name']);
           setFeedvolume(responseData['feed_volume'])
-          // make delete button visible
-          document.getElementById("deletebutton").style.visibility = "visible";
-          document.getElementById("chart").style.visibility = "visible";
+          // make patient info and delete button visible
+          document.getElementById('FindApp').style.display = "block";
+
 
         } else {
           console.error('Failed to fetch data from the server.');
@@ -88,9 +88,7 @@ function MyForm() {
           setAllcentiles(responseData['']);
           setReviewed(responseData['']);
           setFeedname(responseData['']);
-          setFeedvolume(responseData[''])
-          document.getElementById("deletebutton").style.visibility = "hidden";
-
+          setFeedvolume(responseData['']);
         }
       } catch (error) {
         console.error('Error:', error);
@@ -119,9 +117,8 @@ function MyForm() {
     return (
       <div>
         <br />
+        <h3>Please input an NHS number to load a patient.</h3>
         <form onSubmit={handleSearchSubmit}>
-          <label>
-            NHS number:  
             <input
               label = "NHS Number"
               inputStyle="box" 
@@ -131,19 +128,15 @@ function MyForm() {
               value={data.NHS_no}
               onChange={handleChange}
             />
-          </label>
-          
           <button type="submit">Find patient</button>
         </form>
         <br />
           
-      
         {data ? (
-          <div id='FindApp'>
+          <div id='FindApp' class ="hidden">
             {firstname !== 0 && lastname!== 0 && dob!== 0 && lowergoalcentile!== 0 && uppergoalcentile!== 0 ? (
-              <div >
+              <div>
                 <br />First Name: {firstname}
-   
                 <br />Last Name: {lastname}
                 <br />Date of Birth: {dob}
                 <br />Age: {age}
@@ -155,28 +148,27 @@ function MyForm() {
                 <br />Reviewed since nutritional requirements changed?: {reviewedSinceChange}
                 <br />Feed: {feed_name}
                 <br />Feed volume: {feed_volume}
-                
+                <button id = 'deletebutton'  onClick = {deleteUser}>Delete user</button>
+                <br></br>
+                <br></br>
+                <h2>Centile chart</h2>
+                <div id = "chart">
+                  <div><canvas id="acquisitions"></canvas></div>
+                  <LineChart reviewed={reviewedgraph} allcentiles={allcentilesgraph} upper={uppergoalcentile} lower = {lowergoalcentile} />
+              </div>
               </div>
             ) : (
-              <p>Loading data...</p>
-         
+              <p>No data...</p>
             )}
           </div>
         ) : null}
-         <button id = 'deletebutton' class = "hidden" onClick = {deleteUser}>Delete user</button>
-              <div id = "chart" class ="hidden">
-              <br></br>
-              <br></br>
-                <h2>Centile chart</h2>
-                <div><canvas id="acquisitions"></canvas></div>
-                <LineChart reviewed={reviewedgraph} allcentiles={allcentilesgraph} upper={uppergoalcentile} lower = {lowergoalcentile} />
-              </div>
+         
       </div>
     );
   }
 
-  /**
- * Find component that serves as the main page for searching and displaying patient information.
+/**
+ * Find component: serves as the main page for searching and displaying patient information.
  * @component
  * @returns {JSX.Element} Find component.
  */
@@ -184,13 +176,8 @@ function MyForm() {
 const Find= () => {
     return(
       <div className="App">
-            <h3>Please input an NHS number to load a patient.</h3>
-          
-          <MyForm />
-          <br />
+        <MyForm />
         <br />
-        
-
       </div>
     );
     }

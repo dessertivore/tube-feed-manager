@@ -57,10 +57,12 @@ function UpdateForm() {
               onFocus={(e) => e.target.type = 'date'}
               onBlur={(e) => e.target.type = ''}
               placeholder='Birth date'
-              type="date"
               name = "dob"
               value={data.dob}
-              onChange={(e) => setData({ ...data, dob: (e.target.value)})}
+              onChange={(e) => {
+                const dateValue = new Date(e.target.value);
+                setData({ ...data, dob: (e.target.value)});
+              }}
             />
           <br />
        
