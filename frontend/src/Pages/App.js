@@ -56,7 +56,6 @@ const App = () => (
     <h1>Tube feed manager</h1>
     <Navigation />
     <Main />
-    <footer>Created by dessertivore</footer>
   </div>
 );
 
