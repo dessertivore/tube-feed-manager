@@ -60,7 +60,6 @@ function UpdateForm() {
               name = "dob"
               value={data.dob}
               onChange={(e) => {
-                const dateValue = new Date(e.target.value);
                 setData({ ...data, dob: (e.target.value)});
               }}
             />

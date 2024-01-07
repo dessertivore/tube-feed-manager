@@ -74,7 +74,6 @@ function ReviewForm() {
               name = "review_date"
               value={data.review_date}
               onChange={(e) => {
-                const dateValue = new Date(e.target.value);
                 setData({ ...data, review_date: (e.target.value)});
               }}        
             />
