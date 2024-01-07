@@ -8,12 +8,16 @@ import Review from './Review';
 import Update from './Update';
 
 
+/**
+ * Navigation component that renders navigation links.
+ * @component
+ * @returns {JSX.Element} Navigation component with links.
+ */
 
 const Navigation = () => (
   <nav>
     <ul>
       <li><NavLink exact activeClassName="current" to='/'>Home</NavLink></li>
-
       <li><NavLink exact activeClassName="current" to='/Find'>Find</NavLink></li>
       <li><NavLink exact activeClassName="current" to='/Insert'>Create new patient</NavLink></li>
       <li><NavLink exact activeClassName="current" to='/Review'>Review</NavLink></li>
@@ -21,6 +25,12 @@ const Navigation = () => (
     </ul>
   </nav>
 );
+
+/**
+ * Main component that defines routes for the application.
+ * @component
+ * @returns {JSX.Element} Routes for different components.
+ */
 
 const Main = () => {
   return (
@@ -35,6 +45,11 @@ const Main = () => {
 }
 
 
+/**
+ * App component, the root component of the application.
+ * @component
+ * @returns {JSX.Element} Main application component.
+ */
 
 const App = () => (
   <div className='app'>

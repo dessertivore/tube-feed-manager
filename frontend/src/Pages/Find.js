@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import './../index.css'
 import LineChart from '../acquisitions';
 
+/**
+ * MyForm component that handles user input, fetches data, and displays patient information.
+ * @component
+ * @returns {JSX.Element} MyForm component.
+ */
+
 function MyForm() {
     const [data, setData] = useState({
       NHS_no: '',
@@ -22,6 +28,13 @@ function MyForm() {
     const [reviewedgraph, setReviewedGraph] = useState('');
     const [allcentilesgraph, setAllcentilesGraph] = useState('');
 
+     /**
+     * Deletes the user with the specified NHS number.
+     * @async
+     * @function
+     * @returns {Promise<void>} A Promise that resolves when the deletion is complete.
+     */
+
     const deleteUser = async () => {
       console.log('Button clicked!');
       try{
@@ -31,6 +44,13 @@ function MyForm() {
         console.error('Error:', error);
       }
     }
+    
+    /**
+     * Fetches user data from the server based on the NHS number provided.
+     * @async
+     * @function
+     * @returns {Promise<void>} A Promise that resolves when the data is fetched.
+     */
 
     const fetchData = async () => {
       try {
@@ -76,9 +96,20 @@ function MyForm() {
         console.error('Error:', error);
       }
     };
-  
+    
+    /**
+     * Handles changes in the NHS number input field.
+     * @function
+     * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+     */
+
     const handleChange = (e) => setData({...data, NHS_no: parseInt(e.target.value)});
-  
+    
+    /**
+     * Handles the form submission to fetch data based on the provided NHS number.
+     * @function
+     * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+     */
     const handleSearchSubmit = (e) => {
       e.preventDefault(); // Prevent the default form submission
       fetchData(); // Call the fetchData function to send data to the API
@@ -143,6 +174,12 @@ function MyForm() {
       </div>
     );
   }
+
+  /**
+ * Find component that serves as the main page for searching and displaying patient information.
+ * @component
+ * @returns {JSX.Element} Find component.
+ */
 
 const Find= () => {
     return(

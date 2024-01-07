@@ -2,6 +2,20 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { useEffect } from 'react';
 
+  /**
+  * LineChart Component
+  * 
+  * Initializes a line chart to visualize weight centiles in comparison to upper and 
+  * lower centile goals over a series of review dates.
+  * @component
+  * @param {Array} reviewed - An array of review dates to populate the x-axis of the chart.
+  * @param {Array} allcentiles - An array of weight centiles corresponding to the review dates.
+  * @param {number} upper - The upper centile goal for reference on the chart.
+  * @param {number} lower - The lower centile goal for reference on the chart.
+  * 
+  * @returns {JSX.Element} A canvas element containing the rendered line chart.
+  */ 
+ 
 const LineChart = ({ reviewed, allcentiles, upper, lower }) => {
     useEffect(() => {
 

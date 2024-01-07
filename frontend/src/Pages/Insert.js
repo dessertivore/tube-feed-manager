@@ -46,80 +46,76 @@ function InsertForm() {
       <div>
         <br />
         <form onSubmit={handleInsertSubmit}>
-          <label>
-            NHS number:  
+         
             <input
+              placeholder='NHS Number'
               type="number"
               name = "nhs_no"
               value={data.nhs_no}
               onChange={(e) => setData({ ...data, nhs_no: parseInt(e.target.value)})}
             />
-          </label>
           <br />
-          <label>
-            First name:  
+         
             <input
+              placeholder='First name'
               type="string"
               name = "firstname"
               value={data.firstname}
               onChange={(e) => setData({ ...data, firstname: (e.target.value)})}          />
-          </label>
           <br />
-          <label>
-            Last name:  
+      
             <input
+              placeholder='Last name'
               type="string"
               name = "lastname"
               value={data.lastname}
               onChange={(e) => setData({ ...data, lastname: (e.target.value)})}          />
-          </label>
           <br />
-          <label>
-            Date of birth:  
+       
             <input
+              onFocus={(e) => e.target.type = 'date'}
+              onBlur={(e) => e.target.type = ''}
+              placeholder='Review date'
               type="date"
               name = "dob"
               value={data.dob}
               onChange={(e) => setData({ ...data, dob: (e.target.value)})}
             />
-          </label>
           <br />
-          <label>
-            Lower goal weight centile:  
+       
             <input
+              placeholder='Lower goal weight centile'
               type="number"
               name = "lower_wt_goal"
               value={data.lower_wt_goal}
               onChange={(e) => setData({ ...data, lower_wt_goal: parseInt(e.target.value)})}
             />
-          </label>
+     
           <br />
-          <label>
-            Upper goal weight centile:  
+        
             <input
+              placeholder='Upper goal weight centile'
               type="number"
               name = "upper_wt_goal"
               value={data.upper_wt_goal}
               onChange={(e) => setData({ ...data, upper_wt_goal: parseInt(e.target.value)})}          />
-          </label>
           <br />
-          <label>
-            Feed name:  
+
             <input
+              placeholder='Feed name'
               type="str"
               name = "feed"
               value={data.feed}
               onChange={(e) => setData({ ...data, feed: (e.target.value)})}          />
-          </label>
+  
           <br />
-          <label>
-            Feed volume:  
+       
             <input
+              placeholder='Feed volume'
               type="number"
               name = "volume"
               value={data.volume}
               onChange={(e) => setData({ ...data, volume: parseInt(e.target.value)})}          />
-          </label>
           <br />
           <button type="submit">Insert patient</button>
         </form>

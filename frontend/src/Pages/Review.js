@@ -44,54 +44,52 @@ function ReviewForm() {
       <div>
         <br />
         <form onSubmit={handleInsertSubmit}>
-          <label>
-            NHS number:  
             <input
               type="number"
+              placeholder = "NHS Number"
               name = "nhs_no"
               value={data.nhs_no}
               onChange={(e) => setData({ ...data, nhs_no: parseInt(e.target.value)})}
             />
-          </label>
           <br />
-          <label>
-            Review date:  
+           
             <input
-              type="date"
+              onFocus={(e) => e.target.type = 'date'}
+              onBlur={(e) => e.target.type = ''}
+              placeholder='Review date'
               name = "review_date"
               value={data.review_date}
               onChange={(e) => setData({ ...data, review_date: (e.target.value)})}          />
-          </label>
+       
           <br />
-          <label>
-            Weight centile:  
+         
             <input
+              placeholder = "Weight centile"
               type="number"
               name = "weight_centile"
               value={data.centile}
               onChange={(e) => setData({ ...data, weight_centile: parseInt(e.target.value)})}          />
-          </label>
+    
           <br />
-          <label>
-            Feed name:  
+       
             <input
+              placeholder='Feed name'
               type="string"
               name = "feed_name"
               value={data.feed_name}
               onChange={(e) => setData({ ...data, feed_name: (e.target.value)})}
             />
-          </label>
+      
           <br />
-          <label>
-            Feed volume:  
+
             <input
+              placeholder='Feed volume'
               type="number"
               name = "feed_volume"
               value={data.feed_volume}
               onChange={(e) => setData({ ...data, feed_volume: parseInt(e.target.value)})}
             />
-          </label>
-    
+          <br />
           <button type="submit">Add review</button>
         </form>
       </div>
