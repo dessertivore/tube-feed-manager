@@ -9,7 +9,7 @@ from resources import (
     delete_patient,
     update_user,
 )
-from schemas import User, UserCreate, UserUpdate, AddReview
+from schemas import User, UserCreate, UserUpdate, AddReview, UserFind
 import datetime
 
 app = FastAPI()
@@ -25,7 +25,7 @@ app.add_middleware(
 
 
 @app.get("/user/{nhs_no}")
-async def user(nhs_no: int) -> dict:
+async def user(nhs_no: int) -> UserFind:
     """
     Reads all user information linked to specified NHS number.
 
@@ -45,23 +45,7 @@ async def user(nhs_no: int) -> dict:
     # raise error if no patient found
     except ValueError:
         raise HTTPException(status_code=404, detail="User not found")
-    founduser = output[0]
-    age = output[1]
-    review_since_change = output[2]
-    return {
-        "firstname": founduser.firstname,
-        "lastname": founduser.lastname,
-        "dob": founduser.dob,
-        "lowergoalcentile": founduser.lower_wt_goal,
-        "uppergoalcentile": founduser.upper_wt_goal,
-        "weightcentile": founduser.currentcentile,
-        "allcentiles": founduser.allcentiles,
-        "reviewed": founduser.reviewed,
-        "feed_name": founduser.feed,
-        "feed_volume": founduser.volume,
-        "age": age,
-        "review_since_change": review_since_change,
-    }
+    return output
 
 
 @app.post("/user")

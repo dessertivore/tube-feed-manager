@@ -44,3 +44,8 @@ class AddReview(BaseModel):
     weight_centile: int
     feed_name: str
     feed_volume: int
+
+
+class UserFind(User):
+    age: int
+    reviewed_since_change: bool

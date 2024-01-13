@@ -62,16 +62,16 @@ function MyForm() {
           setLastname(responseData['lastname']);
           setDob(responseData['dob']);
           setAge(responseData['age']);
-          setLowergoalcentile(responseData['lowergoalcentile']);
-          setUppergoalcentile(responseData['uppergoalcentile']);
-          setWeightcentile(responseData['weightcentile']);
+          setLowergoalcentile(responseData['lower_wt_goal']);
+          setUppergoalcentile(responseData['upper_wt_goal']);
+          setWeightcentile(responseData['currentcentile']);
           setAllcentiles(responseData['allcentiles'].join(", "));
           setAllcentilesGraph(responseData['allcentiles'])
           setReviewed(responseData['reviewed'].join(", "));
-          setReviewedSinceChange(responseData['review_since_change']);
+          setReviewedSinceChange(responseData['reviewed_since_change'] ? 'Yes' : 'No');
           setReviewedGraph(responseData['reviewed'])
-          setFeedname(responseData['feed_name']);
-          setFeedvolume(responseData['feed_volume'])
+          setFeedname(responseData['feed']);
+          setFeedvolume(responseData['volume'])
           // make patient info and delete button visible
           document.getElementById('FindApp').style.display = "block";
 

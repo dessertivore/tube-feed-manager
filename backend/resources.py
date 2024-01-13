@@ -1,7 +1,7 @@
 import psycopg
 from psycopg import sql
 
-from schemas import User, UserCreate, UserUpdate, AddReview
+from schemas import User, UserCreate, UserUpdate, AddReview, UserFind
 import datetime
 from datetime import date, timedelta
 
@@ -17,7 +17,7 @@ con = psycopg.connect(
 )
 
 
-def search_users_nhs(input_nhsno: int) -> [User, int, str]:
+def search_users_nhs(input_nhsno: int) -> UserFind:
     """
     Fetch records matching inputted NHS no.
 
@@ -75,7 +75,7 @@ def search_users_nhs(input_nhsno: int) -> [User, int, str]:
     cursor.close()
     # assign attributes to user, based on columns of database
     if pulled_data:
-        pulleduser = User(
+        pulleduser = UserFind(
             firstname=pulled_data[0],
             lastname=pulled_data[1],
             dob=pulled_data[2],
@@ -87,29 +87,28 @@ def search_users_nhs(input_nhsno: int) -> [User, int, str]:
             reviewed=[],
             currentcentile=0,
             allcentiles=[],
+            age=int((date.today() - (pulled_data[2])) / timedelta(days=365.2425)),
+            reviewed_since_change=False,
         )
-        age = int((date.today() - (pulleduser.dob)) / timedelta(days=365.2425))
-        reviewed_since_change = "No"
         if pulled_data[7] is not None:
             pulleduser.reviewed = pulled_data[8]
             pulleduser.allcentiles = pulled_data[7]
             pulleduser.currentcentile = pulleduser.allcentiles[0]
             # check if reviewed since nutr requirements changed at 1y, 4y, 7y, 11y and 15y
             review_checkpoints = [1, 4, 7, 11, 15]
-
             for x in review_checkpoints:
-                if age >= x:
+                if pulleduser.age >= x:
                     closest_checkpoint = x
                     continue
-                elif age < x:
+                elif pulleduser.age < x:
                     break
             # find date at which child's req changed most recently
             req_change = pulleduser.dob + datetime.timedelta(
                 days=closest_checkpoint * 365
             )
-            if (pulleduser.reviewed[0] - req_change).days > 0:
-                reviewed_since_change = "Yes"
-        return pulleduser, age, reviewed_since_change
+            if (pulleduser.reviewed[-1] - req_change).days > 0:
+                pulleduser.reviewed_since_change = True
+        return pulleduser
     else:
         raise ValueError("Could not find user.")
 
