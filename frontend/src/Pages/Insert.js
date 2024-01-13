@@ -75,7 +75,7 @@ function InsertForm() {
             <input
               onFocus={(e) => e.target.type = 'date'}
               onBlur={(e) => e.target.type = ''}
-              placeholder='Review date'
+              placeholder='Birth date'
               name = "dob"
               value={data.dob}
               onChange={(e) => {
@@ -131,7 +131,6 @@ function InsertForm() {
          <h3> Please input patient details to insert into database.</h3>
           <InsertForm />
         <br />
-        
       </div>
     );
     }

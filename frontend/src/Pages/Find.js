@@ -162,7 +162,6 @@ function MyForm() {
             )}
           </div>
         ) : null}
-         
       </div>
     );
   }
@@ -177,7 +176,6 @@ const Find= () => {
     return(
       <div className="App">
         <MyForm />
-        <br />
       </div>
     );
     }
