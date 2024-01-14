@@ -1,7 +1,7 @@
 import psycopg
 from psycopg import sql
 
-from schemas import User, UserCreate, UserUpdate, AddReview, UserFind
+from schemas import User, UserCreate, AddReview, UserFind
 import datetime
 from datetime import date, timedelta
 
@@ -133,7 +133,8 @@ def insert_user(new_user: UserCreate) -> UserCreate:
     except:
         cursor = con.cursor()
         cursor.execute(
-            """INSERT INTO patient_data.public.patient_data_table (nhs_no, firstname, lastname, dob, lower_wt_goal, upper_wt_goal) 
+            """INSERT INTO patient_data.public.patient_data_table (nhs_no, firstname, 
+            lastname, dob, lower_wt_goal, upper_wt_goal) 
                     VALUES (%s, %s, %s, %s, %s, %s);""",
             (
                 new_user.nhs_no,
@@ -145,7 +146,8 @@ def insert_user(new_user: UserCreate) -> UserCreate:
             ),
         )
         cursor.execute(
-            """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, feed_volume) 
+            """INSERT INTO patient_data.public.feed_table (nhs_no, feed_name, 
+            feed_volume) 
                     VALUES (%s, %s, %s);""",
             (
                 new_user.nhs_no,
@@ -176,7 +178,8 @@ def insert_review(input: AddReview) -> None:
 
     cursor = con.cursor()
     cursor.execute(
-        """INSERT INTO patient_data.public.review_table (nhs_no, review_date, weight_centile) 
+        """INSERT INTO patient_data.public.review_table (nhs_no, review_date, 
+        weight_centile) 
                    VALUES (%s, %s, %s);""",
         (input.nhs_no, input.review_date, input.weight_centile),
     )
@@ -277,7 +280,7 @@ def delete_patient(nhs_no: int) -> str:
     return "Patient data deleted."
 
 
-def update_user(nhs_no: int, field: str, value: str | int) -> [User, int, str]:
+def update_user(nhs_no: int, field: str, value: str | int) -> UserFind:
     """
     Update user info, e.g. if tube feed information was inputted wrongly at start.
 

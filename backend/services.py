@@ -9,7 +9,7 @@ from resources import (
     delete_patient,
     update_user,
 )
-from schemas import User, UserCreate, UserUpdate, AddReview, UserFind
+from schemas import User, UserCreate, AddReview, UserFind
 import datetime
 
 app = FastAPI()
@@ -49,7 +49,7 @@ async def user(nhs_no: int) -> UserFind:
 
 
 @app.post("/user")
-async def create_user_fast(new_user: UserCreate) -> dict:
+async def create_user_fast(new_user: UserCreate) -> UserFind:
     """
     Create new user using information from React form.
 
@@ -65,23 +65,14 @@ async def create_user_fast(new_user: UserCreate) -> dict:
         this to a Basemodel schema.
     """
     try:
-        inserted_user: User = insert_user(new_user)[0]
+        inserted_user: UserFind = insert_user(new_user)
     except:
         raise ValueError("Could not create user.")
-    return {
-        "nhs_no": inserted_user.nhs_no,
-        "firstname": inserted_user.firstname,
-        "lastname": inserted_user.lastname,
-        "dob": inserted_user.dob,
-        "lowergoalcentile": inserted_user.lower_wt_goal,
-        "uppergoalcentile": inserted_user.upper_wt_goal,
-        "feed": inserted_user.feed,
-        "volume": inserted_user.volume,
-    }
+    return inserted_user
 
 
 @app.put("/user/{nhs_no}")
-async def update_user_fast(nhs_no: int, input: dict) -> User:
+async def update_user_fast(nhs_no: int, input: dict) -> UserFind:
     """
     Update user information.
 

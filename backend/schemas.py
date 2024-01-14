@@ -27,17 +27,6 @@ class UserCreate(UserBase):
     pass
 
 
-class UserUpdate(BaseModel):
-    firstname: str | None = None
-    lastname: str | None = None
-    dob: datetime.date | None = None
-    lower_wt_goal: int | None = None
-    upper_wt_goal: int | None = None
-    nhs_no: int | None = None
-    feed: str | None = None
-    volume: int | None = None
-
-
 class AddReview(BaseModel):
     nhs_no: int
     review_date: datetime.date
