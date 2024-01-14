@@ -1,5 +1,4 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from resources import (
     search_users_nhs,
@@ -9,7 +8,7 @@ from resources import (
     delete_patient,
     update_user,
 )
-from schemas import User, UserCreate, AddReview, UserFind
+from schemas import UserCreate, AddReview, UserFind
 import datetime
 
 app = FastAPI()
