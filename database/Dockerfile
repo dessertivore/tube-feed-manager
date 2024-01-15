@@ -6,7 +6,7 @@ ENV POSTGRES_DB=patient_data
 ENV POSTGRES_USER=myuser
 ENV POSTGRES_PASSWORD=password
 
-# Copy your SQL file into the container (place your SQL file in the same directory as this Dockerfile)
+# Copy your SQL file into the container 
 COPY init.sql /docker-entrypoint-initdb.d/
 
 # Expose the PostgreSQL default port (5432)
