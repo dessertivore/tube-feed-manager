@@ -9,13 +9,17 @@ ENV POETRY_NO_INTERACTION=1 \
 
 WORKDIR /app
 
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+# set env variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY . .
+COPY . /app/
 
-RUN poetry install --without dev
+RUN poetry install --without dev --no-root
 
-CMD ["uvicorn", "services:app", "--reload", "0.0.0.0", "--port", "80"]
+# Expose the port on which the application will run
+EXPOSE 8080
 
-EXPOSE 8000
+# Run the FastAPI application using uvicorn server
+CMD ["poetry", "run", "uvicorn", "services:app", "--host", "0.0.0.0", "--port", "8080"]
 

@@ -1,12 +1,24 @@
-# below is online docker compose template as placeholder for now
-# version: '3'
-# services:
-#   frontend:
-#     build: ./docker/frontend
-#     ports:
-#      - "8081:8081"
-#   backend:
-#     build: ./docker/backend
-#     ports:
-#       - "8080:8080"
+version: '3.8'
+
+services:
+  backend:
+    build: backend/.
+    ports:
+      - "8000:8080"
+
+   
+
+  db:
+    build: database/.
+    ports:
+      - "5432:5432"
+    # image: postgres:latest
+    # expose:
+    #   - 5432
+    # environment:
+    #   - POSTGRES_DB=patient_data
+    #   - POSTGRES_USER=myuser
+    #   - POSTGRES_PASSWORD=password
+
+
 
