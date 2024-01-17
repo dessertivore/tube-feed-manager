@@ -27,22 +27,16 @@ make install
 ```
 
 Minimum Python version 3.10.
-Must have docker installed with postgres image.
+Must have docker installed and running.
 
 ## Usage
 
 In separate terminals:
 
-- Start up the database, with PostgreSQL and Docker:
+- Start up PostgreSQL database and backend with Docker:
 
 ```shell
-make database
-```
-
-- Start up the API:
-
-```shell
-make backend
+docker-compose up
 ```
 
 - Start up the React frontend:
