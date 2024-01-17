@@ -12,7 +12,7 @@ con = psycopg.connect(
     dbname="patient_data",
     user="myuser",
     password="password",
-    host="localhost",
+    host="db",
     port="5432",
 )
 
